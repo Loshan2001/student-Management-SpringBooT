@@ -2,10 +2,14 @@ package controller;
 
 
 import dao.StudentDao;
+import dto.StudentDto;
+import dto.StudentResponseDto;
 import entity.Student;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import transformer.StudentTransformer;
+
 import java.util.List;
 import static common.ApiPaths.*;
 
@@ -13,14 +17,17 @@ import static common.ApiPaths.*;
 @RequestMapping(STUDENT_BASE_API)
 public class StudentController {
     StudentDao studentDao;
-
-    StudentController(StudentDao studentDao){
+    StudentTransformer studentTransformer;
+    StudentController(StudentDao studentDao, StudentTransformer studentTransformer){
         this.studentDao = studentDao;
+        this.studentTransformer = studentTransformer;
     }
 
     @PostMapping(CREATE_STUDENT) // This should point to "/create"
-    public Student createStudent(@RequestBody Student student) {
-        return studentDao.save(student);
+    public StudentResponseDto createStudent(@RequestBody StudentDto studentDto) {
+        var student = studentTransformer.studentDtoToStudent(studentDto);
+        var savedStudent =  studentDao.save(student);
+        return studentTransformer.studentToStudentDto(savedStudent);
     }
 
     @GetMapping(GET_ALL_STUDENT)

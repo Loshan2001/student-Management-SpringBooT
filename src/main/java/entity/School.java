@@ -1,19 +1,23 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
 @Entity
-public record School(
+@Data
+public class School{
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE)
-        Integer id,
-        String  schoolName,
+        private Integer id;
+        private String  schoolName;
 
         @OneToMany(
                 mappedBy = "school"
         )
-        List<Student> students
-) {
+
+        @JsonBackReference
+        List<Student> students;
 }

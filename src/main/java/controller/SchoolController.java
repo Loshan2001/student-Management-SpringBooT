@@ -3,8 +3,11 @@ package controller;
 
 import common.ApiPaths;
 import dao.SchoolDao;
+import dto.SchoolDto;
+import dto.SchoolResponseDto;
 import entity.School;
 import org.springframework.web.bind.annotation.*;
+import transformer.SchoolTransformer;
 
 import java.util.List;
 
@@ -15,12 +18,16 @@ import static common.ApiPaths.*;
 public class SchoolController {
 
     SchoolDao schoolDao;
-    SchoolController(SchoolDao schoolDao){
+    SchoolTransformer schoolTransformer;
+    SchoolController(SchoolDao schoolDao, SchoolTransformer schoolTransformer){
         this.schoolDao = schoolDao;
+        this.schoolTransformer = schoolTransformer;
     }
     @PostMapping(CREATE_SCHOOL)
-    public School createSchool(@RequestBody School school){
-        return schoolDao.save(school);
+    public SchoolDto createSchool(@RequestBody SchoolDto schoolDto){
+        var school = schoolTransformer.schoolDtoToSchool(schoolDto);
+        schoolDao.save(school);
+        return schoolDto ;
     }
 
     @GetMapping(GET_SCHOOL_BY_ID)
@@ -29,8 +36,12 @@ public class SchoolController {
     }
 
     @GetMapping(GET_ALL_SCHOOL)
-    public List<School> getAllSchool(){
-        return schoolDao.findAll();
+    public List<SchoolDto> getAllSchool(){
+
+        return schoolDao.findAll()
+                .stream() //Think of it as turning the list of schools into a series of items that you can work with one by one.
+                .map(schoolTransformer::schoolToSchoolDto)//For every school in the list, it converts that School object into a SchoolDto object using the schoolTransformer
+                .toList();//After converting each school to a SchoolDto, this line gathers them all together into a new list that you can return
     }
 
 }
