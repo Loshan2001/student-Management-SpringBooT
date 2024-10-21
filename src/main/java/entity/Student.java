@@ -1,9 +1,8 @@
 package entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.lang.reflect.Type;
 
 
 @Entity
@@ -14,7 +13,17 @@ public record Student(
         String firstName,
         String lastName,
         String email,
-        String age
+        String age,
+
+        @OneToOne(
+                mappedBy = "student", //reference name
+                cascade = CascadeType.ALL //  when we remove the student it will also remove student profile
+        )
+        StudentProfile studentProfile,
+
+        @ManyToOne
+        @JoinColumn(name = "school_id")
+        School school
 
 ) {
 }
