@@ -3,8 +3,15 @@ package service;
 import dao.StudentDao;
 import dto.StudentDto;
 import dto.StudentResponseDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import transformer.StudentTransformer;
+
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -49,5 +56,4 @@ public class StudentService {
         studentDao.deleteById(id);
         return "Student successfully removed";
     }
-
 }

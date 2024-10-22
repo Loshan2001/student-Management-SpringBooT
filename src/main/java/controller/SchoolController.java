@@ -6,6 +6,7 @@ import dao.SchoolDao;
 import dto.SchoolDto;
 import dto.SchoolResponseDto;
 import entity.School;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import service.SchoolService;
 import transformer.SchoolTransformer;
@@ -26,7 +27,7 @@ public class SchoolController {
 
 
     @PostMapping(CREATE_SCHOOL)
-    public SchoolDto createSchool(@RequestBody SchoolDto schoolDto){
+    public SchoolDto createSchool(@Valid  @RequestBody SchoolDto schoolDto){ // @Valid - used to ensure this action must be validated
         return schoolService.createSchool(schoolDto);
     }
 

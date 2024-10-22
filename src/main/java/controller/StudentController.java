@@ -23,7 +23,7 @@ public class StudentController {
     }
 
 
-    @PostMapping(CREATE_STUDENT) // This should point to "/create"
+    @PostMapping(CREATE_STUDENT)
     public StudentResponseDto createStudent(@RequestBody StudentDto studentDto) {
         return studentService.createStudent(studentDto);
     }
